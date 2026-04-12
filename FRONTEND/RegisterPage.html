@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="../Styles/Styles.css">
+</head>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  .Register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+</style>
+<body>
+<div class="Register-container">
+    <h1>Register</h1>
+    <input type="text" id="LoginName" placeholder="LoginName" required>
+    <input type="text" id="Name" placeholder="Name" required>
+    <input type="password" id="LoginPassword" placeholder="Login Password" required>
+    <button onclick="register()">Register</button>
+ </div>   
+    <script src="../Scripts/LoginPage.js"></script>
+</body>
+</html>

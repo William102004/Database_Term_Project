@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../Styles/Styles.css">
+</head>
+<body>
+
+    <div class="page-container">
+
+        <!-- User Bar -->
+        <div class="User Bar">
+            <div class="user-wrapper">
+                <div class="user-circle" onclick="toggleUserMenu()" id="user-circle"></div>
+                <span class="user-name" id="user-name-display"></span>
+                <div class="dropdown-menu" id="user-menu" style="display:none;">
+                    <button onclick="openChangeNameModel()">Change Name</button>
+                    <button onclick="openChangePasswordModel()">Change Password</button>
+                    <button class="delete-btn" onclick="deleteUser()">Delete User</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accounts section -->
+        <div class="section-bar">
+            <h2>Accounts</h2>
+            <button id="AddAccount" class="btn-primary" onclick="openAddAccountModel()">Add Account</button>
+        </div>
+
+        <!-- Accounts table -->
+        <table class="accounts-table">
+            <thead>
+                <tr>
+                    <th>Account Name</th>
+                    <th>Balance</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="accounts-tbody">
+                <!-- Filled by HomePage JS page -->
+            </tbody>
+        </table>
+
+    </div>
+
+    <!--  Add Account Model -->
+    <div id="add-account-model" class="model" style="display:none;">
+        <div class="model-box">
+            <h3>Add Account</h3>
+            <input type="text"   id="add-account-name"    placeholder="Account Name (e.g. Checking)">
+            <input type="number" id="add-account-balance" placeholder="Starting Balance" min="0" step="0.01">
+            <div class="model-buttons">
+                <button class="btn-primary" onclick="insertAccount()">Add</button>
+                <button onclick="closeAllModels()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!--  Update Balance Model -->
+    <div id="update-balance-model" class="model" style="display:none;">
+        <div class="model-box">
+            <h3>Update Balance</h3>
+            <input type="hidden" id="balance-account-number">
+            <input type="number" id="new-balance" placeholder="New Balance" min="0" step="0.01">
+            <div class="model-buttons">
+                <button class="btn-primary" onclick="updateBalance()">Save</button>
+                <button onclick="closeAllModels()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Account Name Model  -->
+    <div id="update-account-name-model" class="model" style="display:none;">
+        <div class="model-box">
+            <h3>Update Account Name</h3>
+            <input type="hidden" id="edit-account-number">
+            <input type="text"   id="new-account-name" placeholder="New Account Name">
+            <div class="model-buttons">
+                <button class="btn-primary" onclick="updateAccountName()">Save</button>
+                <button onclick="closeAllModels()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change User Name Model -->
+    <div id="change-name-model" class="model" style="display:none;">
+        <div class="model-box">
+            <h3>Change Name</h3>
+            <input type="text" id="new-user-name" placeholder="New Name">
+            <div class="model-buttons">
+                <button class="btn-primary" onclick="changeName()">Save</button>
+                <button onclick="closeAllModels()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!--Change Password Model-->
+    <div id="change-password-model" class="model" style="display:none;">
+        <div class="model-box">
+            <h3>Change Password</h3>
+            <input type="password" id="new-password" placeholder="New Password">
+            <div class="model-buttons">
+                <button class="btn-primary" onclick="changePassword()">Save</button>
+                <button onclick="closeAllModels()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../Scripts/HomePage.js"></script>
+</body>
+</html>
