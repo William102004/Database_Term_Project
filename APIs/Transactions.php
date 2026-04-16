@@ -53,23 +53,79 @@ switch($action)
             exit();
         }
         $AccountNumber = $_GET["AccountNumber"] ?? '';
-
+        $Category = $_GET["Category"] ?? '';
+        $DateFrom = $_GET["DateFrom"] ?? '';
+        $DateTo = $_GET["DateTo"] ?? '';
+        $Name = $_GET["Name"] ?? '';
+        $AmountMin = $_GET["AmountMin"] ?? '';
+        $AmountMax = $_GET["AmountMax"] ?? '';
         if(empty($AccountNumber))
         {
             echo json_encode(["ok" => false, "error" => "Account Number is required to view transactions"]);
             exit();
         }
+        
+        if(!empty($Category) || !empty($DateFrom) || !empty($DateTo) || !empty($Name) || !empty($AmountMin) || !empty($AmountMax))
+        {
+            $query = "SELECT * FROM Transactions WHERE AccountNumber = ?";
+            $params = [$AccountNumber];
 
-        try
+            if(!empty($Category))
+            {
+                $query .= " AND Category = ?";
+                $params[] = $Category;
+            }
+            if(!empty($DateFrom))
+            {
+                $query .= " AND Date >= ?";
+                $params[] = $DateFrom;
+            }
+            if(!empty($DateTo))
+            {
+                $query .= " AND Date <= ?";
+                $params[] = $DateTo;
+            }
+            if(!empty($Name))
+            {
+                $query .= " AND Name LIKE ?";
+                $params[] = "%$Name%";
+            }
+            if(!empty($AmountMin))
+            {
+                $query .= " AND Amount >= ?";
+                $params[] = $AmountMin;
+            }
+            if(!empty($AmountMax))
+            {
+                $query .= " AND Amount <= ?";
+                $params[] = $AmountMax;
+            }
+
+            try
+            {
+                $stmt = $conn->prepare($query);
+                $stmt->execute($params);
+                $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode(["ok" => true, "transactions" => $transactions]);
+            }
+            catch(PDOException $e)
+            {
+                echo json_encode(["ok" => false, "error" => "Error: " . $e->getMessage()]);
+            }
+        }    
+        else
         {
-            $stmt = $conn->prepare("SELECT * FROM Transactions WHERE AccountNumber = ?");
-            $stmt->execute([$AccountNumber]);
-            $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo json_encode(["ok" => true, "transactions" => $transactions]);
-        }
-        catch(PDOException $e)
-        {
-            echo json_encode(["ok" => false, "error" => "Error: " . $e->getMessage()]);
+            try
+            {
+                $stmt = $conn->prepare("SELECT * FROM Transactions WHERE AccountNumber = ?");
+                $stmt->execute([$AccountNumber]);
+                $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode(["ok" => true, "transactions" => $transactions]);
+            }
+            catch(PDOException $e)
+            {
+                echo json_encode(["ok" => false, "error" => "Error: " . $e->getMessage()]);
+            }
         }
         break;
     }
