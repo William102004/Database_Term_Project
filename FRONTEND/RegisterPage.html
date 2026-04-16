@@ -9,6 +9,7 @@
 </head>
 <style>
   body {
+    background: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,11 +18,41 @@
   }
 
   .Register-container {
+    border-radius: 12px;
+    background: white;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    padding: 40px 36px;
+    gap: 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   }
+
+  .Register-container input{
+          width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1.5px solid #050307;
+            border-radius: 12px;
+            color: #000000;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+  }
+  .register-button{
+            width: 70%;
+            padding: 12px;
+            background: transparent;
+            border: 1.5px solid #050307;
+            border-radius: 12px;
+            color: #000000;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+  }
+ 
 </style>
 <body>
 <div class="Register-container">
@@ -29,7 +60,7 @@
     <input type="text" id="LoginName" placeholder="LoginName" required>
     <input type="text" id="Name" placeholder="Name" required>
     <input type="password" id="LoginPassword" placeholder="Login Password" required>
-    <button onclick="register()">Register</button>
+    <button class="register-button" onclick="register()">Register</button>
  </div>   
     <script src="../Scripts/LoginPage.js"></script>
 </body>

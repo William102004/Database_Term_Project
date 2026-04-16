@@ -7,7 +7,9 @@
 <title>Login</title>
 <link rel="stylesheet" href="../Styles/Styles.css">
 <style>
+   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
+    background: linear-gradient(123deg, rgb(240, 125, 240), rgb(145, 145, 255));
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,10 +18,47 @@
   }
 
   .login-container {
+    border-radius: 12px;
+    background: white;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    padding: 40px 36px;
+    gap: 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  }
+
+  .login-container input{
+          width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1.5px solid #050307;
+            border-radius: 12px;
+            color: #000000;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+  }
+  .login-button,.register-button{
+            width: 70%;
+            padding: 12px;
+            background: transparent;
+            background-color: #2008f8;
+            border: 1.5px solid #050307;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+  }
+  .forgot-password {
+    background-color: transparent;
+    border: none;
+    color: #05080c;
+    cursor: pointer;
+    text-decoration: underline;
   }
 </style>
 </head>
@@ -28,10 +67,11 @@
   <h1>Expense Tracker</h1>
   <h2>Login</h2>
   <input type="text" id="LoginName" placeholder="Login Name" required>
-  <input type="password" id="LoginPassword" placeholder="Login Password" required>
-  <button onclick="login()">Login</button>
-  <button onclick="window.location.href='RegisterPage.html'">Register</button>
-  <button onclick="window.location.href='ForgotPassword.html'">Forgot Password</button>
+  <input type="password" id="LoginPassword" placeholder="Password" required>
+  <button class="login-button"onclick="login()">Sign In</button>
+  <button class="register-button" onclick="window.location.href='RegisterPage.html'">Register</button>
+  <button class="forgot-password" onclick="window.location.href='ForgotPassword.html'">Forgot Password?</button>
+  
 </div>
 <script src="../Scripts/LoginPage.js"></script>
 </body>
