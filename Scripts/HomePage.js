@@ -6,124 +6,6 @@ if(!sessionStorage.getItem("LoginName"))
 const Name = sessionStorage.getItem("Name");
 const LoginName = sessionStorage.getItem("LoginName");
 
-// Set initials circle and name
-const initials = Name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
-document.getElementById("user-circle").textContent       = initials;
-document.getElementById("user-name-display").textContent = Name;
-
-
-
-//Toggle user circle menu
-function toggleUserMenu()
-{
-    const menu = document.getElementById("user-menu");
-    const isOpen = menu.style.display === "block";
-    document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
-    if(!isOpen) menu.style.display = "block";
-}
-
-//Close menus when clicking outside
-document.addEventListener("click", function(e)
-{
-    const clickedInsideMenu = e.target.closest(".dropdown-menu");
-    const clickedEditCircle = e.target.closest(".edit-circle");
-    const clickedUserCircle = e.target.closest(".user-circle");
-
-    if(!clickedInsideMenu && !clickedEditCircle && !clickedUserCircle)
-    {
-        document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
-    }
-});
-
-//Change User Name
-function openChangeNameModel()
-{
-    closeAllModels();
-    document.getElementById("change-name-model").style.display = "flex";
-}
-
-function changeName()
-{
-    const newName = document.getElementById("new-user-name").value.trim();
-
-    if(!newName)
-    {
-        alert("Please enter a name.");
-        return;
-    }
-
-    const data = new FormData();
-    data.append("action", "UpdateUserName");
-    data.append("Name",   newName);
-
-    fetch('../APIs/Users.php', { 
-        method: 'POST', 
-        body: data
-     })
-    .then(Response => Response.json())
-    .then(data => {
-        if(data.ok)
-        {
-            //Update Name and Display of Name and initial
-            sessionStorage.setItem("Name", newName);
-            document.getElementById("user-name-display").textContent = newName;
-            const updatedInitials = newName.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
-            document.getElementById("user-circle").textContent = updatedInitials;
-            closeAllModels();
-        }
-        else
-        {
-            alert("Error: " + data.error);
-        }
-    });
-}
-
-// Change Password
-function openChangePasswordModel()
-{
-    closeAllModels();
-    document.getElementById("change-password-model").style.display = "flex";
-}
-
-function changePassword()
-{
-    //Get new Password
-    const newPassword = document.getElementById("new-password").value;
-
-    //Ask for input
-    if(!newPassword)
-    {
-        alert("Please enter a new password.");
-        return;
-    }
-
-    //Add minimum password length
-    if(newPassword.length < 6)
-    {
-        alert("Password must be at least 6 characters.");
-        return;
-    }
-
-    //Update password calling action from php file
-    const data = new FormData();
-    data.append("action",        "UpdateUserPasswordLoggedIN");
-    data.append("LoginPassword", newPassword);
-
-    fetch('../APIs/Users.php', { method: 'POST', body: data })
-    .then(Response => Response.json())
-    .then(data => {
-        if(data.ok)
-        {
-            alert("Password changed successfully.");
-            closeAllModels();
-        }
-        else
-        {
-            alert("Error: " + data.error);
-        }
-    });
-}
-
 //Delete User
 function deleteUser()
 {
@@ -205,14 +87,6 @@ function goToAccount(accountNumber)
     window.location.href = "AccountPage.html";
 }
 
-//Toggle edit circle menu
-function toggleEditMenu(accountNumber)
-{
-    const menu = document.getElementById("edit-menu-" + accountNumber);
-    const isOpen = menu.style.display === "block";
-    document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
-    if(!isOpen) menu.style.display = "block";
-}
 
 //Add Account
 function openAddAccountModel()
@@ -359,7 +233,7 @@ function deleteAccount(accountNumber)
     data.append("AccountNumber", accountNumber);
 
     fetch('../APIs/Account.php', { method: 'POST', body: data })
-    .then(res => res.json())
+    .then(Response => Response.json())
     .then(data => {
         if(data.ok)
         {
@@ -373,12 +247,5 @@ function deleteAccount(accountNumber)
     });
 }
 
-
-
-//Close all models
-function closeAllModels()
-{
-    document.querySelectorAll(".model").forEach(m => m.style.display = "none");
-}
 
 loadAccounts();

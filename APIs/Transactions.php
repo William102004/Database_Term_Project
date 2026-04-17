@@ -137,6 +137,7 @@ switch($action)
             exit();
         }
         $TransactionNumber = $_POST["TransactionNumber"] ?? '';
+        $AccountNumber = $_POST["AccountNumber"] ?? '';
         $Name = $_POST["Name"] ?? '';
         $Amount = $_POST["Amount"] ?? '';
         $Category = $_POST["Category"] ?? '';
@@ -156,8 +157,8 @@ switch($action)
 
         try
         {
-            $stmt = $conn->prepare("UPDATE Transactions SET Name = ?, Amount = ?, Category = ?, Date = ? WHERE TransactionNumber = ?");
-            $stmt->execute([$Name, $Amount, $Category, $Date, $TransactionNumber]);
+            $stmt = $conn->prepare("UPDATE Transactions SET Name = ?, Amount = ?, Category = ?, Date = ? WHERE TransactionNumber = ? AND AccountNumber = ?");
+            $stmt->execute([$Name, $Amount, $Category, $Date, $TransactionNumber, $AccountNumber]);
             echo json_encode(["ok" => true, "message" => "Transaction updated successfully"]);
         }
         catch(PDOException $e)
@@ -174,17 +175,18 @@ switch($action)
             exit();
         }
         $TransactionNumber = $_POST["TransactionNumber"] ?? '';
+        $AccountNumber = $_POST["AccountNumber"] ?? '';
         
-        if(empty($TransactionNumber))
+        if(empty($TransactionNumber) || empty($AccountNumber))
         {
-            echo json_encode(["ok" => false, "error" => "Transaction Number is required"]);
+            echo json_encode(["ok" => false, "error" => "Transaction Number and Account Number are required"]);
             exit();
         }
 
         try
         {
-            $stmt = $conn->prepare("DELETE FROM Transactions WHERE TransactionNumber = ?");
-            $stmt->execute([$TransactionNumber]);
+            $stmt = $conn->prepare("DELETE FROM Transactions WHERE TransactionNumber = ? AND AccountNumber = ?");
+            $stmt->execute([$TransactionNumber, $AccountNumber]);
             echo json_encode(["ok" => true, "message" => "Transaction deleted successfully"]);
         }
         catch(PDOException $e)

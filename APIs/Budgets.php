@@ -42,7 +42,7 @@ switch($action)
             }
             $stmt = $conn->prepare("INSERT INTO Budget (AccountNumber, Category, Threshold, Frequency) VALUES (?,?,?,?)");
             $stmt->execute([$AccountNumber, $Category, $Threshold, $Frequency]);
-            $BudgetNumber = $conn->lastInsertId();
+            $BudgetID = $conn->lastInsertId();
             echo json_encode(["ok" => true, "message" => "Budget created successfully","BudgetNumber" => $BudgetNumber]);
         }
         catch(PDOException $e)
@@ -78,6 +78,7 @@ switch($action)
         {
             echo json_encode(["ok" => false, "error" => "Error: " . $e->getMessage()]);
         }
+        break;
     }
     case'EditBudget':
     {
