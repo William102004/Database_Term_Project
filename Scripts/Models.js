@@ -1,14 +1,14 @@
-const Name = sessionStorage.getItem("Name");
+const UserName = sessionStorage.getItem("Name");
 
-if(!Name)
+if(!UserName)
 {
     window.location.href = "LoginPage.html";
 }
 
 // Set initials circle and name
-const initials = Name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+const initials = UserName.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
 document.getElementById("user-circle").textContent       = initials;
-document.getElementById("user-name-display").textContent = Name;
+document.getElementById("user-name-display").textContent = UserName;
 
 
 

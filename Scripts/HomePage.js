@@ -3,20 +3,20 @@ if(!sessionStorage.getItem("LoginName"))
     window.location.href = "LoginPage.html";
 }
 
-const Name = sessionStorage.getItem("Name");
+const UserName = sessionStorage.getItem("Name");
 const LoginName = sessionStorage.getItem("LoginName");
 
 //Delete User
 function deleteUser()
 {
-    //Prompt user to confirm
+    //Prompt User to confirm
     if(!confirm("Are you sure? This will permanently delete your account and all your data.")) return;
 
     //Follow through on action with Delete action in php file
     const data = new FormData();
-    data.append("action", "DeleteUser");
+    data.append("action", "DeleteName");
 
-    fetch('../APIs/Users.php', { method: 'POST', body: data })
+    fetch('../APIs/Names.php', { method: 'POST', body: data })
     .then(Response=> Response.json())
     .then(data => {
         if(data.ok)
@@ -63,7 +63,7 @@ function displayAccounts(accounts)
     accounts.forEach(account => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td class="account-row-name"    onclick="goToAccount(${account.AccountNumber})">${account.AccountName}</td>
+            <td class="account-row-Name"    onclick="goToAccount(${account.AccountNumber})">${account.AccountName}</td>
             <td class="account-row-balance" onclick="goToAccount(${account.AccountNumber})">$${parseFloat(account.Balance).toFixed(2)}</td>
             <td class="account-row-edit">
                 <div class="edit-wrapper">
@@ -98,11 +98,11 @@ function openAddAccountModel()
 //Insert an account into table
 function insertAccount()
 {
-    //Get account name and balance for display
+    //Get account Name and balance for display
     const accountName = document.getElementById("add-account-name").value.trim();
     const balance = document.getElementById("add-account-balance").value;
 
-    //Require user to fill out name and balance
+    //Require Name to fill out Name and balance
     if(!accountName || balance === "")
     {
         alert("Please fill out all fields.");
@@ -188,14 +188,14 @@ function openUpdateAccountNameModel(accountNumber, currentName)
 
 function updateAccountName()
 {
-    //get new account name
+    //get new account Name
     const accountNumber = document.getElementById("edit-account-number").value;
     const accountName = document.getElementById("new-account-name").value.trim();
 
-    //Require new account name be put
+    //Require new account Name be put
     if(!accountName)
     {
-        alert("Please enter a name.");
+        alert("Please enter a Name.");
         return;
     }
 
@@ -224,7 +224,7 @@ function updateAccountName()
 // Delete Account
 function deleteAccount(accountNumber)
 {
-    //Ask user to confirm if they want to delete said account
+    //Ask Name to confirm if they want to delete said account
     if(!confirm("Delete this account? All transactions and budgets will also be deleted.")) return;
 
     //Use DeleteAccount action from php file
