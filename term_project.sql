@@ -31,7 +31,7 @@ CREATE TABLE `Account` (
   `AccountNumber` int(11) NOT NULL,
   `LoginName` varchar(50) NOT NULL,
   `Balance` decimal(10,2) NOT NULL DEFAULT 0.00,
-  'AccountName' varchar(30) NOT NULL
+  `AccountName` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
