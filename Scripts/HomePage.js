@@ -2,7 +2,7 @@ if(!sessionStorage.getItem("LoginName"))
 {
     window.location.href = "LoginPage.html";
 }
-
+loadAccounts();
 const LoginName = sessionStorage.getItem("LoginName");
 
 //Delete User
@@ -246,5 +246,7 @@ function deleteAccount(accountNumber)
     });
 }
 
-
-loadAccounts();
+//Refresh when going back to page.
+window.addEventListener("pageshow", function(event) {
+    loadAccounts();
+});

@@ -34,9 +34,28 @@ switch($action)
 
         try
         {
+            //check that transaction is possible with current account balance
+            $stmt = $conn->prepare("SELECT Balance FROM Account WHERE AccountNumber = ?");
+            $stmt->execute([$AccountNumber]);
+            $account = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(!$account)
+            {
+                echo json_encode(["ok" => false, "error" => "Account not found"]);
+                exit();
+            }
+            if($account["Balance"] < $Amount)
+            {
+                echo json_encode(["ok" => false, "error" => "Insufficient funds for transaction"]);
+                exit();
+            }
+            //Insert transaction
             $stmt = $conn->prepare("INSERT INTO Transactions (AccountNumber, Name, Amount, Category, Date) VALUES (?,?,?,?,?)");
             $stmt->execute([$AccountNumber, $Name, $Amount, $Category, $Date]);
             $TransactionNumber = $conn->lastInsertId();
+
+            //Update account balance
+            $stmt = $conn->prepare("UPDATE Account SET Balance = Balance - ? WHERE AccountNumber = ?");
+            $stmt->execute([$Amount, $AccountNumber]);
             echo json_encode(["ok" => true, "message" => "Transaction added successfully", "TransactionNumber" => $TransactionNumber]);
         }
         catch(PDOException $e)
@@ -157,9 +176,43 @@ switch($action)
 
         try
         {
+            //Check that transaction exists and get old amount and check that new transaction is possible
+            $stmt = $conn->prepare("SELECT Amount FROM Transactions WHERE TransactionNumber = ? AND AccountNumber = ?");
+            $stmt->execute([$TransactionNumber, $AccountNumber]);
+            $transaction = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(!$transaction)
+            {
+                echo json_encode(["ok" => false, "error" => "Transaction not found"]);
+                exit();
+            }
+            $oldAmount = $transaction["Amount"];
+            //check that transaction is possible
+            $stmt = $conn->prepare("SELECT Balance FROM Account WHERE AccountNumber = ?");
+            $stmt->execute([$AccountNumber]);
+            $account = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(!$account)
+            {
+                echo json_encode(["ok" => false, "error" => "Account not found"]);
+                exit();
+            }
+            $balanceAfter = $account["Balance"] + $oldAmount;
+            if($balanceAfter < $Amount)
+            {
+                echo json_encode(["ok" => false, "error" => "Insufficient funds for transaction"]);
+                exit();
+            }
+
             $stmt = $conn->prepare("UPDATE Transactions SET Name = ?, Amount = ?, Category = ?, Date = ? WHERE TransactionNumber = ? AND AccountNumber = ?");
             $stmt->execute([$Name, $Amount, $Category, $Date, $TransactionNumber, $AccountNumber]);
             echo json_encode(["ok" => true, "message" => "Transaction updated successfully"]);
+
+            //Update account balance
+            $stmt = $conn->prepare("UPDATE Account SET Balance = Balance + ? WHERE AccountNumber = ?");
+            $stmt->execute([$oldAmount, $AccountNumber]);
+    
+            $stmt = $conn->prepare("UPDATE Account SET Balance = Balance - ? WHERE AccountNumber = ?");
+            $stmt->execute([$Amount, $AccountNumber]);
+            
         }
         catch(PDOException $e)
         {
@@ -185,6 +238,15 @@ switch($action)
 
         try
         {
+            //Restore account balance before deleting transaction
+            $stmt = $conn->prepare("SELECT Amount FROM Transactions WHERE TransactionNumber = ? AND AccountNumber = ?");
+            $stmt->execute([$TransactionNumber, $AccountNumber]);
+            $transaction = $stmt->fetch(PDO::FETCH_ASSOC);
+            $oldAmount = $transaction["Amount"];
+            $stmt = $conn->prepare("UPDATE Account SET Balance = Balance + ? WHERE AccountNumber = ?");
+            $stmt->execute([$oldAmount, $AccountNumber]);
+
+            //Delete transaction
             $stmt = $conn->prepare("DELETE FROM Transactions WHERE TransactionNumber = ? AND AccountNumber = ?");
             $stmt->execute([$TransactionNumber, $AccountNumber]);
             echo json_encode(["ok" => true, "message" => "Transaction deleted successfully"]);
@@ -236,3 +298,4 @@ switch($action)
 
     }
 }
+?>

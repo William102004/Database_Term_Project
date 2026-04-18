@@ -127,6 +127,7 @@ function InsertTransaction()
             document.getElementById("add-transaction-date").value = "";
             closeAllModels();
             loadTransactions();
+            loadAccount();
         }
         else
         {
@@ -159,6 +160,7 @@ function EditTransaction()
         {
             closeAllModels();
             loadTransactions();
+            loadAccount();
         }
         else
         {
@@ -190,6 +192,7 @@ function DeleteTransaction(TransactionNumber, AccountNumber)
         if(data.ok)
         {
             loadTransactions();
+            loadAccount();
         }
         else
         {
@@ -270,7 +273,7 @@ function InsertBudget()
 {
     const Category = document.getElementById("add-budget-category-options").value;
     const Threshold = document.getElementById("add-budget-threshold").value;
-    const Frequency = document.getElementById("add-budget-frequency-options").value;
+    const Frequency = document.getElementById("add-frequency-options").value;
 
     if(!Category || !Threshold || !Frequency)
     {
@@ -292,7 +295,7 @@ function InsertBudget()
         {
             document.getElementById("add-budget-category-options").value = "";
             document.getElementById("add-budget-threshold").value = "";
-            document.getElementById("add-budget-frequency-options").value = "";
+            document.getElementById("add-frequency-options").value = "";
             closeAllModels();
             loadBudgets();
         }

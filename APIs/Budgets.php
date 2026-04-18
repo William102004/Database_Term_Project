@@ -109,6 +109,7 @@ switch($action)
         {
             echo json_encode(["ok" => false, "error" => "Error: " . $e->getMessage()]);
         }
+        break;
     }
     case'DeleteBudget':
     {
@@ -180,3 +181,5 @@ switch($action)
     }
 
 }
+
+?>
