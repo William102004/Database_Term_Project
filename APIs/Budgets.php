@@ -80,6 +80,43 @@ switch($action)
         }
         break;
     }
+    case'getBudget':
+    {
+        if(!isset($_SESSION["LoginName"]))
+        {
+            echo json_encode(["ok" => false, "error" => "Please Log in to create a budget"]);
+            exit();
+        }
+        
+        $AccountNumber = $_GET["AccountNumber"] ?? '';
+        $BudgetID = $_GET["BudgetID"] ?? '';
+
+        if(empty($AccountNumber))
+        {
+            echo json_encode(["ok" => false, "error" => "Account Number is required to view budgets"]);
+            exit();
+        }
+
+        try
+        {
+            $stmt = $conn->prepare("SELECT * FROM Budget WHERE AccountNumber = ? AND BudgetID = ?");
+            $stmt->execute([$AccountNumber, $BudgetID]);
+            $budget = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($budget)
+            {
+                echo json_encode(["ok" => true, "budget" => $budget]);
+            }
+            else
+            {
+                echo json_encode(["ok" => false, "error" => "Budget not found"]);
+            }
+        }
+        catch(PDOException $e)
+        {
+            echo json_encode(["ok" => false, "error" => "Error: " . $e->getMessage()]);
+        }
+        break;
+    }
     case'EditBudget':
     {
         if(!isset($_SESSION["LoginName"]))

@@ -148,6 +148,42 @@ switch($action)
         }
         break;
     }
+    case'GetTransaction':
+    {
+        if(!isset($_SESSION["LoginName"]))
+        {
+            echo json_encode(["ok" => false, "error" => "Please Log in to view transaction"]);
+            exit();
+        }
+        $TransactionNumber = $_GET["TransactionNumber"] ?? '';
+        $AccountNumber = $_GET["AccountNumber"] ?? '';
+
+        if(empty($TransactionNumber) || empty($AccountNumber))
+        {
+            echo json_encode(["ok" => false, "error" => "Transaction Number and Account Number are required to view transaction"]);
+            exit();
+        }
+
+        try
+        {
+            $stmt = $conn->prepare("SELECT * FROM Transactions WHERE TransactionNumber = ? AND AccountNumber = ?");
+            $stmt->execute([$TransactionNumber, $AccountNumber]);
+            $transaction = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($transaction)
+            {
+                echo json_encode(["ok" => true, "transaction" => $transaction]);
+            }
+            else
+            {
+                echo json_encode(["ok" => false, "error" => "Transaction not found"]);
+            }
+        }
+        catch(PDOException $e)
+        {
+            echo json_encode(["ok" => false, "error" => "Error: " . $e->getMessage()]);
+        }
+        break;
+    }
     case'EditTransaction':
     {
         if(!isset($_SESSION["LoginName"]))
