@@ -3,7 +3,6 @@ if(!sessionStorage.getItem("LoginName"))
     window.location.href = "LoginPage.html";
 }
 
-const UserName = sessionStorage.getItem("Name");
 const LoginName = sessionStorage.getItem("LoginName");
 
 //Delete User
