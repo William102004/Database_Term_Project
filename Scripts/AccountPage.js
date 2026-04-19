@@ -245,7 +245,7 @@ function displayBudgets(budgets)
     budgets.forEach(budget => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td class="budget-row-category" onclick="toggleEditMenu('budget-${budget.BudgetID}')">${budget.Category}</td>
+            <td class="budget-row-category" onclick="goToBudgetDetails(${budget.BudgetID})">${budget.Category}</td>
             <td class="budget-row-threshold"  onclick="goToBudgetDetails(${budget.BudgetID})">$${parseFloat(budget.Threshold).toFixed(2)}</td>
             <td class="budget-row-frequency" onclick="goToBudgetDetails(${budget.BudgetID})">${budget.Frequency}</td>
             <td class="budget-row-edit">
@@ -381,6 +381,28 @@ function loadAccount()
     .catch(err => console.log("Fetch error: ",err));
 }
 
-loadTransactions();
-loadBudgets();
-loadAccount();
+function goBackToHomePage()
+{
+    window.location.href = "HomePage.html";
+}
+
+function SpendingVsBudget()
+{
+    window.location.href = "SpendingVsBudget.html";
+}
+
+function AdvancedFeature()
+{
+    window.location.href = "AdvancedFeature.html";
+}
+
+function MonthlySpending()
+{
+    window.location.href = "MonthlySpending.html";
+}
+window.addEventListener("pageshow", function(event) {
+    loadTransactions();
+    loadBudgets();
+    loadAccount();
+});
+

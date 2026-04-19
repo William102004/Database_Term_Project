@@ -34,7 +34,7 @@
     border-collapse: collapse;
     background: white;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
@@ -116,3 +116,321 @@
 
 
 
+/* ── Button Styles ────────────────────────────────────── */
+.btn-primary {
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #3d5166;
+}
+
+.btn-secondary {
+    background-color: #7f8c8d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #95a5a6;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    width: 100%;
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* ── Transaction Details ─────────────────────────────── */
+.transaction-details-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 30px;
+    margin: 20px 0;
+    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.detail-box {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-left: 4px solid #2c3e50;
+    border-radius: 6px;
+}
+
+.detail-box label {
+    display: block;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.detail-box p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #34495e;
+    word-break: break-word;
+}
+
+.transaction-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.account-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.account-content h2 {
+    color: #2c3e50;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* ── Dropdown Menu ──────────────────────────────────── */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 100;
+    min-width: 150px;
+    margin-top: 5px;
+}
+
+.dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #2c3e50;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu button:first-child {
+    border-radius: 5px 5px 0 0;
+}
+
+.dropdown-menu button:last-child {
+    border-radius: 0 0 5px 5px;
+}
+
+.dropdown-menu button:hover {
+    background-color: #ecf0f1;
+}
+
+/* ── Page Container ────────────────────────────────── */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.user-bar {
+    background-color: white;
+    padding: 16px 20px;
+    border-bottom: 2px solid #ecf0f1;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ── Section Bar ──────────────────────────────────── */
+.section-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-bar h2 {
+    color: #2c3e50;
+    margin: 0;
+}
+
+/* ── Filters ──────────────────────────────────────── */
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.filters input,
+.filters select {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.filters input:focus,
+.filters select:focus {
+    outline: none;
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.1);
+}
+
+/* ── Transactions Table ──────────────────────────────– */
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: visible;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+}
+
+.transactions-table th {
+    background-color: #2c3e50;
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.transactions-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.transactions-table tr:last-child td {
+    border-bottom: none;
+}
+
+.transaction-row-name,
+.transaction-row-balance,
+.transaction-row-category,
+.transaction-row-date {
+    cursor: pointer;
+}
+
+.transaction-row-name:hover,
+.transaction-row-balance:hover,
+.transaction-row-category:hover,
+.transaction-row-date:hover {
+    background-color: #f5f9ff;
+}
+
+.transaction-row-name {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.transaction-row-balance {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.transaction-row-edit {
+    width: 50px;
+    text-align: center;
+}
+
+/* ── Budget Table ──────────────────────────────────– */
+.budget-table {
+    overflow: visible;
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.budget-table th {
+    background-color: #2c3e50;
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.budget-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.budget-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* ── Model Input ──────────────────────────────────── */
+.model-box input,
+.model-box select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.model-box input:focus,
+.model-box select:focus {
+    outline: none;
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.1);
+}

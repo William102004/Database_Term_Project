@@ -19,14 +19,15 @@
                     <button onclick="openChangePasswordModel()">Change Password</button>
                     <button class="delete-btn" onclick="deleteUser()">Delete User</button>
                 </div>
-                <button onclick="SpendingVsBudget()">Budget vs Spending Analysis</button>
-                <button onclick="MonthlySpending()">Monthly Spending Data</button>
-                <button onclick="AdvancedFeature()">Detailed Analysis</button>
+                <button class="btn-primary" onclick="SpendingVsBudget()">Budget vs Spending Analysis</button>
+                <button class="btn-primary" onclick="MonthlySpending()">Monthly Spending Data</button>
+                <button class="btn-primary" onclick="AdvancedFeature()">Detailed Analysis</button>
             </div>
         </div>
 
         <!-- Account Content -->
         <div class="account-content">
+            <button class="btn-secondary" onclick="goBackToHomePage()">← Back to Home</button>
             <h2 id="account-name">Account Name</h2>
             <p id="account-balance">Balance:</p>
 
@@ -48,7 +49,7 @@
                 <input type="date"   id="filter-date-from">
                 <input type="date"   id="filter-date-to">
                 <button class="btn-primary" onclick="loadTransactions()">Apply</button>
-                <button onclick="clearFilters()">Clear</button>
+                <button class="btn-primary" onclick="clearFilters()">Clear</button>
             </div>
             <!-- Transactions Table -->
             <table class="transactions-table">
@@ -63,7 +64,6 @@
                 </thead>
                 <tbody id="transactions-tbody"></tbody>
             </table>
-        </div>
             <!-- Budget Table -->
              <h4>Budgets <button class="btn-primary" onclick="openAddBudgetModel()">Add Budget</button></h4>
             <table class="budget-table">

@@ -207,7 +207,7 @@ switch($action)
                 ");
             $stmt->execute([$AccountNumber]);
             $Summaries = $stmt->fetchall(PDO::FETCH_ASSOC);
-            echo json_encode(["ok"=> true, "summaries" => $summaries]);
+            echo json_encode(["ok"=> true, "summaries" => $Summaries]);
         }
         catch(PDOException $e)
         {
