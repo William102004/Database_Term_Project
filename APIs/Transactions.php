@@ -313,14 +313,14 @@ switch($action)
         {
             $stmt = $conn->prepare(
             "SELECT 
-                DATE_Format(Date, '%Y-%m') AS Month,
+                DATE_Format(Date, '%M') AS Month,
                 Category,
                 SUM(Amount) AS TotalSpent,
                 COUNT(*)    AS TotalTransactions
             FROM Transactions
-            WHERE AccountNumber = ?
+            WHERE AccountNumber = ? AND Date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
             GROUP BY Month, Category
-            ORDER BY Month DESC, Category
+            ORDER BY Month DESC, TotalSpent DESC, Category, TotalTransactions DESC
             ");
             $stmt->execute([$AccountNumber]);
             $monthly = $stmt->fetchall(PDO::FETCH_ASSOC);

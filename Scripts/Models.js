@@ -148,6 +148,26 @@ function deleteUser()
     });
 }
 
+function Logout()
+{
+    const data = new FormData();
+    data.append("action", "logout");
+    
+    fetch('../APIs/Users.php', { method: 'POST', body: data })
+    .then(Response => Response.json())
+    .then(data => {
+        if(data.ok)
+        {
+            sessionStorage.clear();
+            window.location.href = "LoginPage.html";
+        }    
+        else
+        {
+            alert("Error: " + data.error);
+        }
+    });    
+}
+
 //Close all models
 function closeAllModels()
 {

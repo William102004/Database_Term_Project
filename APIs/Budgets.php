@@ -202,6 +202,10 @@ switch($action)
                 FROM Budget     
                 LEFT JOIN Transactions
                     ON Budget.AccountNumber = Transactions.AccountNumber AND Budget.Category = Transactions.Category
+                AND (
+                    (Budget.Frequency = 'Monthly' AND MONTH(Transactions.Date) = MONTH(CURRENT_DATE()) AND YEAR(Transactions.Date) = YEAR(CURRENT_DATE())) OR
+                    (Budget.Frequency = 'Weekly' AND YEARWEEK(Transactions.Date, 1) = YEARWEEK(CURRENT_DATE(), 1)) AND YEAR(Transactions.Date) = YEAR(CURRENT_DATE())
+                )
                 WHERE Budget.AccountNumber = ?
                 GROUP BY Budget.BudgetID, Budget.Category, Budget.Threshold, Budget.Frequency
                 ");
