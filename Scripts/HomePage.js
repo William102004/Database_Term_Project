@@ -5,31 +5,6 @@ if(!sessionStorage.getItem("LoginName"))
 loadAccounts();
 const LoginName = sessionStorage.getItem("LoginName");
 
-//Delete User
-function deleteUser()
-{
-    //Prompt User to confirm
-    if(!confirm("Are you sure? This will permanently delete your account and all your data.")) return;
-
-    //Follow through on action with Delete action in php file
-    const data = new FormData();
-    data.append("action", "DeleteName");
-
-    fetch('../APIs/Names.php', { method: 'POST', body: data })
-    .then(Response=> Response.json())
-    .then(data => {
-        if(data.ok)
-        {
-            sessionStorage.clear();
-            window.location.href = "LoginPage.html";
-        }
-        else
-        {
-            alert("Error: " + data.error);
-        }
-    });
-}
-
 //Load accounts
 function loadAccounts()
 {
