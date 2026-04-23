@@ -5,15 +5,13 @@ if (!AccountNumber)
     window.location.href = "HomePage.html";
 }
 
-const CATEGORY_COLORS = {
-    Food:           "#e74c3c",
-    Transportation: "#3498db",
-    Entertainment:  "#9b59b6",
-    Utilities:      "#f39c12",
-    Groceries:      "#27ae60"
-};
+let trendChart = null;
 
-let spendingChart = null;
+const RISK_STYLES = {
+    High:   { bg: "#e74c3c", text: "white" },
+    Medium: { bg: "#f39c12", text: "white" },
+    Low:    { bg: "#27ae60", text: "white" }
+};
 
 function goBack()
 {
@@ -22,97 +20,146 @@ function goBack()
 
 function loadAnalysis()
 {
-    fetch(`../APIs/Transactions.php?action=MonthlySpending&AccountNumber=${AccountNumber}`)
+    fetch(`../APIs/AdvancedFeature.php?action=AnalyzeSpending&AccountNumber=${AccountNumber}`)
     .then(response => response.json())
     .then(data => {
         if (data.ok)
         {
-            renderChart(data.monthly);
-            renderCategorySummary(data.monthly);
+            renderPeriodLabel(data.currentMonth, data.prevMonth);
+            renderSummaryCards(data.analysis);
+            renderChart(data.analysis);
+            renderTable(data.analysis);
         }
         else
         {
-            alert("Error loading analysis data: " + data.error);
+            alert("Error loading analysis: " + data.error);
         }
     })
     .catch(err => console.log("Fetch error: ", err));
 }
 
-function renderChart(monthly)
+function renderPeriodLabel(current, prev)
 {
-    // Data comes in descending month order — reverse for chronological display
-    const months     = [...new Set(monthly.map(r => r.Month))].reverse();
-    const categories = [...new Set(monthly.map(r => r.Category))];
+    const el = document.getElementById("period-label");
+    if (!current)
+    {
+        el.textContent = "No spending data found for this account.";
+        return;
+    }
+    el.textContent = prev
+        ? "Comparing " + current + " to " + prev
+        : current + " — baseline month (no prior data to compare yet)";
+}
 
-    const datasets = categories.map(cat => {
-        const color = CATEGORY_COLORS[cat] || "#95a5a6";
-        return {
-            label: cat,
-            data: months.map(month => {
-                const row = monthly.find(r => r.Month === month && r.Category === cat);
-                return row ? parseFloat(row.TotalSpent) : 0;
-            }),
-            backgroundColor: color,
-            borderColor:      color,
-            borderWidth: 1
-        };
-    });
+function renderSummaryCards(analysis)
+{
+    const counts = { High: 0, Medium: 0, Low: 0 };
+    analysis.forEach(row => counts[row.RiskLevel]++);
+    document.getElementById("count-high").textContent   = counts.High;
+    document.getElementById("count-medium").textContent = counts.Medium;
+    document.getElementById("count-low").textContent    = counts.Low;
+}
 
-    const ctx = document.getElementById("spending-chart").getContext("2d");
+function renderChart(analysis)
+{
+    // Only show chart when there is a previous month to compare against
+    const comparable = analysis.filter(r => r.PreviousSpend !== null);
+    if (comparable.length === 0)
+    {
+        document.getElementById("chart-section").style.display = "none";
+        return;
+    }
 
-    if (spendingChart) spendingChart.destroy();
+    document.getElementById("chart-section").style.display = "block";
 
-    spendingChart = new Chart(ctx, {
+    const labels   = comparable.map(r => r.Category);
+    const prevData = comparable.map(r => r.PreviousSpend);
+    const currData = comparable.map(r => r.CurrentSpend);
+
+    const ctx = document.getElementById("trend-chart").getContext("2d");
+    if (trendChart) trendChart.destroy();
+
+    trendChart = new Chart(ctx, {
         type: "bar",
-        data: { labels: months, datasets },
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: "Previous Month",
+                    data: prevData,
+                    backgroundColor: "#95a5a6",
+                    borderColor:     "#7f8c8d",
+                    borderWidth: 1
+                },
+                {
+                    label: "Current Month",
+                    data: currData,
+                    backgroundColor: "#2c3e50",
+                    borderColor:     "#1a252f",
+                    borderWidth: 1
+                }
+            ]
+        },
         options: {
             responsive: true,
-            plugins: {
-                legend: { position: "top" }
-            },
+            plugins: { legend: { position: "top" } },
             scales: {
-                x: { stacked: false },
                 y: {
-                    stacked: false,
                     beginAtZero: true,
-                    ticks: {
-                        callback: value => "$" + value.toFixed(2)
-                    }
+                    ticks: { callback: v => "$" + parseFloat(v).toFixed(2) }
                 }
             }
         }
     });
 }
 
-function renderCategorySummary(monthly)
+function renderTable(analysis)
 {
-    const totals = {};
-    monthly.forEach(row => {
-        if (!totals[row.Category])
-        {
-            totals[row.Category] = { spent: 0, transactions: 0 };
-        }
-        totals[row.Category].spent        += parseFloat(row.TotalSpent);
-        totals[row.Category].transactions += parseInt(row.TotalTransactions);
-    });
-
-    const tbody = document.getElementById("category-summary-tbody");
+    const tbody = document.getElementById("analysis-tbody");
     tbody.innerHTML = "";
 
-    const sorted = Object.entries(totals).sort((a, b) => b[1].spent - a[1].spent);
-
-    if (sorted.length === 0)
+    if (analysis.length === 0)
     {
-        tbody.innerHTML = "<tr><td colspan='3'>No transaction data found.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='7'>No spending data found for this account.</td></tr>";
         return;
     }
 
-    sorted.forEach(([category, info]) => {
+    analysis.forEach(row => {
+        const style = RISK_STYLES[row.RiskLevel];
+
+        const changeText = row.ChangePercent !== null
+            ? (row.ChangePercent >= 0 ? "+" : "") + row.ChangePercent + "%"
+            : "—";
+
+        const changeStyle = row.ChangePercent === null ? "" :
+            row.ChangePercent > 0
+                ? "color:#e74c3c; font-weight:bold;"
+                : "color:#27ae60; font-weight:bold;";
+
+        const budgetText = row.BudgetPercent !== null
+            ? row.BudgetPercent + "% of $" + parseFloat(row.BudgetThreshold).toFixed(2)
+            : "No budget";
+
+        const flagsHtml = row.Flags
+            .map(f => `<div style="font-size:0.8rem; color:#7f8c8d; margin-top:3px;">• ${f}</div>`)
+            .join("");
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>${category}</td>
-            <td>$${info.spent.toFixed(2)}</td>
-            <td>${info.transactions}</td>
+            <td style="font-weight:bold; color:#2c3e50;">${row.Category}</td>
+            <td>$${parseFloat(row.CurrentSpend).toFixed(2)}</td>
+            <td>${row.PreviousSpend !== null ? "$" + parseFloat(row.PreviousSpend).toFixed(2) : "—"}</td>
+            <td style="${changeStyle}">${changeText}</td>
+            <td>${budgetText}</td>
+            <td>
+                <span style="background:${style.bg}; color:${style.text}; padding:4px 10px; border-radius:12px; font-size:0.85rem; font-weight:bold; white-space:nowrap;">
+                    ${row.RiskLevel}
+                </span>
+            </td>
+            <td>
+                <div style="font-size:0.9rem; color:#34495e;">${row.Feedback}</div>
+                ${flagsHtml}
+            </td>
         `;
         tbody.appendChild(tr);
     });
