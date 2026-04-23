@@ -554,12 +554,7 @@ INSERT INTO `Transactions` (`TransactionNumber`, `AccountNumber`, `Name`, `Amoun
 --
 -- Triggers `Transactions`
 --
-DELIMITER $$
-CREATE TRIGGER `subtract_balance_on_insert` AFTER INSERT ON `Transactions` FOR EACH ROW UPDATE Account
-SET Balance = Balance - NEW.Amount
-WHERE AccountNumber = NEW.AccountNumber
-$$
-DELIMITER ;
+
 
 -- --------------------------------------------------------
 
