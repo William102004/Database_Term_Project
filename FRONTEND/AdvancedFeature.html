@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detailed Analysis</title>
+    <title>Spending Risk Analysis</title>
     <link rel="stylesheet" href="../Styles/Styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -26,25 +26,46 @@
 
         <div class="account-content">
             <button class="btn-secondary" onclick="goBack()">← Back to Account</button>
-            <h2>Detailed Spending Analysis</h2>
+            <h2>Spending Risk Analysis</h2>
+            <p id="period-label" style="color:#7f8c8d; margin-top:4px; margin-bottom:20px;"></p>
 
-            <!-- Monthly Spending Chart -->
-            <h3>Monthly Spending by Category</h3>
-            <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px;">
-                <canvas id="spending-chart"></canvas>
+            <!-- Risk Summary Cards -->
+            <div style="display:flex; gap:16px; margin-bottom:24px; flex-wrap:wrap;">
+                <div style="flex:1; min-width:140px; background:#fdecea; border-left:4px solid #e74c3c; border-radius:8px; padding:16px;">
+                    <div style="font-size:2rem; font-weight:bold; color:#e74c3c;" id="count-high">0</div>
+                    <div style="color:#c0392b; font-weight:bold; font-size:0.95rem;">High Risk</div>
+                </div>
+                <div style="flex:1; min-width:140px; background:#fef9e7; border-left:4px solid #f39c12; border-radius:8px; padding:16px;">
+                    <div style="font-size:2rem; font-weight:bold; color:#f39c12;" id="count-medium">0</div>
+                    <div style="color:#d68910; font-weight:bold; font-size:0.95rem;">Medium Risk</div>
+                </div>
+                <div style="flex:1; min-width:140px; background:#eafaf1; border-left:4px solid #27ae60; border-radius:8px; padding:16px;">
+                    <div style="font-size:2rem; font-weight:bold; color:#27ae60;" id="count-low">0</div>
+                    <div style="color:#1e8449; font-weight:bold; font-size:0.95rem;">Low Risk</div>
+                </div>
             </div>
 
-            <!-- All-time Category Summary -->
-            <h3>All-Time Spending by Category</h3>
+            <!-- Previous vs Current Month Chart -->
+            <div id="chart-section" style="background:white; border-radius:10px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.06); margin-bottom:24px;">
+                <h3 style="margin-top:0; color:#2c3e50;">Previous vs Current Month by Category</h3>
+                <canvas id="trend-chart"></canvas>
+            </div>
+
+            <!-- Category Risk Breakdown Table -->
+            <h3 style="color:#2c3e50;">Category Risk Breakdown</h3>
             <table class="transactions-table">
                 <thead>
                     <tr>
                         <th>Category</th>
-                        <th>Total Spent</th>
-                        <th>Total Transactions</th>
+                        <th>This Month</th>
+                        <th>Last Month</th>
+                        <th>Change</th>
+                        <th>Budget Used</th>
+                        <th>Risk Level</th>
+                        <th>Feedback</th>
                     </tr>
                 </thead>
-                <tbody id="category-summary-tbody"></tbody>
+                <tbody id="analysis-tbody"></tbody>
             </table>
         </div>
 
